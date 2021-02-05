@@ -1,7 +1,7 @@
-import { GameActionTypes } from './type';
+import { GameState, GameActionTypes } from './type';
 
-const defaultState = {
-  
+const defaultState: GameState = {
+  config: {},
 };
 
 const gameReducer = (state = defaultState, action: GameActionTypes) => {

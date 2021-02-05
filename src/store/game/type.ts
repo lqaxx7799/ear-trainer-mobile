@@ -5,3 +5,7 @@ interface InitGame {
 };
 
 export type GameActionTypes = InitGame;
+
+export interface GameState {
+  config: object,
+};
