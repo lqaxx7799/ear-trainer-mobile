@@ -1,7 +1,7 @@
 import { GameActionTypes } from './type';
 
 const defaultState = {
-
+  
 };
 
 const gameReducer = (state = defaultState, action: GameActionTypes) => {

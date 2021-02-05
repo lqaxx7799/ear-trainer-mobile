@@ -4,41 +4,35 @@ import { Provider } from 'react-redux';
 import { createStore } from 'redux';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet } from 'react-native';
+import * as eva from '@eva-design/eva';
+import { ApplicationProvider } from '@ui-kitten/components';
 
 import allReducers from './src/store';
 import Home from './src/components/Home';
-import Game from './src/components/Game';
+import ConfigGame from './src/components/Game/ConfigGame';
 
 export type RootStackParamList = {
   Home: undefined;
-  Game: undefined;
+  ConfigGame: undefined;
 };
 
 const store = createStore(allReducers);
 
 const Stack = createStackNavigator<RootStackParamList>();
 
-
 export default function App() {
   return (
     <Provider store={store}>
-      <StatusBar hidden />
-      <NavigationContainer>
-        <Stack.Navigator initialRouteName='Home'>
-          <Stack.Screen name='Home' component={Home} options={{ headerShown: false }} />
-          <Stack.Screen name='Game' component={Game} options={{ headerShown: false }} />
-        </Stack.Navigator>
-      </NavigationContainer>
+      <ApplicationProvider {...eva} theme={eva.light}>
+        <StatusBar hidden />
+        <NavigationContainer>
+          <Stack.Navigator initialRouteName='Home'>
+            <Stack.Screen name='Home' component={Home} options={{ headerShown: false }} />
+            <Stack.Screen name='ConfigGame' component={ConfigGame} options={{ headerShown: false }} />
+          </Stack.Navigator>
+        </NavigationContainer>
+      </ApplicationProvider>
     </Provider>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
