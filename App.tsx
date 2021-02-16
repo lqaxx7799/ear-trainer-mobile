@@ -8,16 +8,14 @@ import { StyleSheet } from 'react-native';
 import * as eva from '@eva-design/eva';
 import { ApplicationProvider } from '@ui-kitten/components';
 
-import allReducers from './src/store';
+import { store } from './src/store/store';
 import Home from './src/components/Home';
-import ConfigGame from './src/components/Game/ConfigGame';
+import GameConfiguration from './src/components/Game/GameConfiguration';
 
 export type RootStackParamList = {
   Home: undefined;
-  ConfigGame: undefined;
+  GameConfiguration: undefined;
 };
-
-const store = createStore(allReducers);
 
 const Stack = createStackNavigator<RootStackParamList>();
 
@@ -29,7 +27,7 @@ export default function App() {
         <NavigationContainer>
           <Stack.Navigator initialRouteName='Home'>
             <Stack.Screen name='Home' component={Home} options={{ headerShown: false }} />
-            <Stack.Screen name='ConfigGame' component={ConfigGame} options={{ headerShown: false }} />
+            <Stack.Screen name='GameConfiguration' component={GameConfiguration} options={{ headerShown: false }} />
           </Stack.Navigator>
         </NavigationContainer>
       </ApplicationProvider>

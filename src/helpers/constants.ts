@@ -1,4 +1,19 @@
-import { IntervalType } from "./type";
+import { GameType, IntervalType } from "./type";
+
+const GAME_TYPES = [
+  {
+    title: 'Intervals',
+    value: 'INTERVALS',
+  },
+  {
+    title: 'Chords',
+    value: 'CHORDS',
+  },
+  {
+    title: 'Perfect Pitch',
+    value: 'PERFECT_PITCH',
+  },
+];
 
 const INTERVAL_TYPES: IntervalType[] = [
   {
@@ -12,7 +27,7 @@ const INTERVAL_TYPES: IntervalType[] = [
   {
     title: 'Harmonious',
     value: 'harmonious',
-  }
+  },
 ];
 
 const INTERVALS = [
@@ -98,7 +113,30 @@ const INTERVAL_GROUPS = [
   },
 ];
 
+const GAME_CONFIGURATIONS = {
+  INTERVALS: [
+    {
+      title: 'Intervals',
+      data: INTERVAL_GROUPS,
+      formType: 'select',
+    },
+    {
+      title: 'Questions',
+      formType: 'number',
+    },
+    {
+      title: 'Interval Type',
+      data: INTERVAL_TYPES,
+      formType: 'comboBox',
+    },
+  ],
+  CHORDS: [],
+  PERFECT_PITCH: [],
+};
+
 export {
+  GAME_TYPES,
+  GAME_CONFIGURATIONS,
   NOTES,
   INTERVALS,
   INTERVAL_TYPES,

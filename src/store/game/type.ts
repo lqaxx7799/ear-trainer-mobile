@@ -1,11 +1,27 @@
+import { GameType } from "../../helpers/type";
+
 export const INIT_GAME = 'INIT_GAME';
+export const GAME_TYPE_UPDATED = 'GAME_TYPE_UPDATED';
+export const GAME_CONFIGURATION_UPDATED = 'GAME_CONFIGURATION_UPDATED';
+
 interface InitGame {
   type: typeof INIT_GAME,
   payload: any,
 };
 
-export type GameActionTypes = InitGame;
+interface GameTypeUpdated {
+  type: typeof GAME_TYPE_UPDATED,
+  payload: GameType | null,
+};
+
+interface GameConfigurationUpdated {
+  type: typeof GAME_CONFIGURATION_UPDATED,
+  payload: any,
+};
+
+export type GameActionTypes = InitGame | GameTypeUpdated | GameConfigurationUpdated;
 
 export interface GameState {
+  type: GameType | null,
   config: object,
 };
