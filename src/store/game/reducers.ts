@@ -10,7 +10,13 @@ const gameReducer = (state = defaultState, action: GameActionTypes) => {
     case 'GAME_TYPE_UPDATED':
       return {
         ...state,
-        type: action.payload,
+        type: action.payload.type,
+        config: action.payload.config,
+      };
+    case 'GAME_CONFIGURATION_UPDATED':
+      return {
+        ...state,
+        config: action.payload,
       };
     default:
       return state;

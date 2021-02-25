@@ -1,15 +1,24 @@
 import React from 'react';
+import _ from 'lodash';
 import { useDispatch, useSelector } from 'react-redux';
+
+import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
+import { Dimensions, Keyboard } from 'react-native';
 import { RouteProp } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
-import { Button, CheckBox, Layout, Select, SelectItem, Text } from '@ui-kitten/components';
+import { Button, Layout, Text } from '@ui-kitten/components';
 
 import { RootStackParamList } from '../../../App';
-import styles from '../../styles';
-import { INTERVAL_TYPES, INTERVAL_GROUPS, GAME_CONFIGURATIONS } from '../../helpers/constants';
 import { RootState } from '../../store';
 import { GameActionTypes } from '../../store/game/type';
+import { INTERVAL_TYPES, INTERVAL_GROUPS, GAME_CONFIGURATIONS, GAME_TYPES } from '../../helpers/constants';
+import { GameConfigurationType } from '../../helpers/type';
 import gameActions from '../../store/game/action';
+
+import Combobox from './Configurations/Combobox';
+import Select from './Configurations/Select';
+import NumberInput from './Configurations/NumberInput';
+import styles from '../../styles';
 
 type GameScreenNavigationProp = StackNavigationProp<RootStackParamList, 'GameConfiguration'>;
 type GameScreenRouteProp = RouteProp<RootStackParamList, 'GameConfiguration'>;
@@ -19,76 +28,88 @@ type Props = {
   route: GameScreenRouteProp;
 };
 
-export default function Game({ navigation }: Props) {
+export default function GameConfiguration({ navigation }: Props) {
   const type = useSelector((state: RootState) => state.gameReducer.type);
+  const gameConfiguration = useSelector((state: RootState) => state.gameReducer.config);
+
   const dispatch = useDispatch();
 
-  const gameConfigs = type ? GAME_CONFIGURATIONS[type] : null;
+  const gameConfigDefinition = type ? GAME_CONFIGURATIONS[type] : null;
 
-  const editGameConfig = (key: string, value: any) => {
-    dispatch(gameActions.editGameConfig());
+  const editGameConfig = (configKey: string, newValues: any) => {
+    dispatch(gameActions.editGameConfig(configKey, newValues));
   }
 
-  const renderCombobox = (config: any) => {
-    return (
-      <Layout>
-        {config.data.map((item: any) => (
-          <CheckBox
-            onChange={() => editGameConfig(config.title, item.value)}
-            key={item.value}
-          >
-            {item.title}
-          </CheckBox>
-        ))}
-      </Layout>
-    );
-  }
-
-  const renderNumber = (config: any) => {
-    return null;
-  }
-
-  const renderSelect = (config: any) => {
-    return (
-      <Layout>
-        <Select
-          // selectedIndex={selectedIndex}
-          // onSelect={index => setSelectedIndex(index)}
-        >
-          {config.data.map((item: any) => (
-            <SelectItem title={item.title} key={item.value} />
-          ))}
-        </Select>
-      </Layout>
-    );
+  const renderConfig = (configKey: string, config: GameConfigurationType) => {
+    switch (config.formType) {
+      case 'comboBox':
+        return (
+          <Combobox
+            onChange={(newValues) => editGameConfig(configKey, newValues)}
+            options={config.data}
+            key={configKey}
+            values={gameConfiguration[configKey]}
+          />
+        );
+      case 'number':
+        return (
+          <NumberInput
+            onChange={(newValue) => editGameConfig(configKey, newValue)}
+            key={configKey}
+            value={gameConfiguration[configKey]}
+          />
+        );
+      case 'select':
+        return (
+          <Select
+            onChange={(newValue) => editGameConfig(configKey, newValue)}
+            options={config.data}
+            key={configKey}
+            value={gameConfiguration[configKey]}
+          />
+        );
+      default:
+        return null;
+    }
   }
 
   return (
-    <Layout style={{ flex: 1 }}>
-      <Text style={styles.mainTitle}>Ear Trainer Configuration</Text>
+    <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false} style={{ height: Dimensions.get('screen').height }}>
+      <Layout style={styles.configLayout}>
+        <Text
+          style={{
+            ...styles.mainTitle,
+            marginBottom: 10,
+          }}
+        >
+          {type ? GAME_TYPES[type].title : ''} Configuration
+        </Text>
 
-      <Layout>
-        {gameConfigs && gameConfigs.map((item) => {
-          return (
-            <Layout key={item.title}>
-              <Text style={styles.title}>{item.title}</Text>
-              {
-                item.formType === 'comboBox' ? renderCombobox(item) :
-                item.formType === 'number' ? renderNumber(item) :
-                item.formType === 'select' ? renderSelect(item) :
-                null
-              }
-            </Layout>
-          );
-        })}
+        <Layout>
+          {gameConfigDefinition && Object.keys(gameConfigDefinition).map((configKey) => {
+            const config = gameConfigDefinition[configKey];
+            return (
+              <Layout key={config.title} style={{ marginVertical: 10 }}>
+                <Text style={{
+                  ...styles.title,
+                  marginBottom: 5,
+                }}>
+                  {config.title}
+                </Text>
+
+                {renderConfig(configKey, config)}
+              </Layout>
+            );
+          })}
+        </Layout>
+
+        <Button
+          style={{ marginTop: 12 }}
+          onPress={() => navigation.navigate('Home')}
+        >
+          Back to Home
+        </Button>
       </Layout>
-
-      <Button
-        style={{ marginTop: 12 }}
-        onPress={() => navigation.navigate('Home')}
-      >
-        Back to Home
-      </Button>
-    </Layout>
+    </TouchableWithoutFeedback>
   );
 }

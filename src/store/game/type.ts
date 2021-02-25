@@ -11,17 +11,24 @@ interface InitGame {
 
 interface GameTypeUpdated {
   type: typeof GAME_TYPE_UPDATED,
-  payload: GameType | null,
+  payload: {
+    type: GameType | null,
+    config: object,
+  },
 };
 
 interface GameConfigurationUpdated {
-  type: typeof GAME_CONFIGURATION_UPDATED,
-  payload: any,
+  type: typeof GAME_CONFIGURATION_UPDATED;
+  payload: {
+    [key: string]: any;
+  };
 };
 
 export type GameActionTypes = InitGame | GameTypeUpdated | GameConfigurationUpdated;
 
 export interface GameState {
-  type: GameType | null,
-  config: object,
+  type: GameType | null;
+  config: {
+    [key: string]: any;
+  };
 };

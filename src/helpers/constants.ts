@@ -1,19 +1,16 @@
-import { GameType, IntervalType } from "./type";
+import { GameTypes, IntervalType, GameConfigurationsType } from "./type";
 
-const GAME_TYPES = [
-  {
+const GAME_TYPES: GameTypes = {
+  intervals: {
     title: 'Intervals',
-    value: 'INTERVALS',
   },
-  {
+  chords: {
     title: 'Chords',
-    value: 'CHORDS',
   },
-  {
+  perfectPitch: {
     title: 'Perfect Pitch',
-    value: 'PERFECT_PITCH',
   },
-];
+};
 
 const INTERVAL_TYPES: IntervalType[] = [
   {
@@ -113,25 +110,25 @@ const INTERVAL_GROUPS = [
   },
 ];
 
-const GAME_CONFIGURATIONS = {
-  INTERVALS: [
-    {
+const GAME_CONFIGURATIONS: GameConfigurationsType = {
+  intervals: {
+    intervalGroup: {
       title: 'Intervals',
       data: INTERVAL_GROUPS,
       formType: 'select',
     },
-    {
+    questionCount: {
       title: 'Questions',
       formType: 'number',
     },
-    {
+    intervalTypes: {
       title: 'Interval Type',
       data: INTERVAL_TYPES,
       formType: 'comboBox',
     },
-  ],
-  CHORDS: [],
-  PERFECT_PITCH: [],
+  },
+  chords: {},
+  perfectPitch: {},
 };
 
 export {

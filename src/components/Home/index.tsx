@@ -25,19 +25,23 @@ export default function Home({ navigation }: Props) {
     dispatch(gameActions.setGameType(type));
     navigation.navigate('GameConfiguration');
   }
+
   return (
     <Layout style={styles.layout}>
       <Text style={styles.mainTitle}>Ear Trainer</Text>
       <Layout>
-        {GAME_TYPES.map(type => (
-          <Button
-            key={type.value}
-            style={{ marginTop: 12 }}
-            onPress={() => goToGame(type.value)}
-          >
-            {type.title}
-          </Button>
-        ))}
+        {Object.keys(GAME_TYPES).map((keyType: GameType) => {
+          const type = GAME_TYPES[keyType];
+          return (
+            <Button
+              key={keyType}
+              style={{ marginTop: 12 }}
+              onPress={() => goToGame(keyType)}
+            >
+              {type.title}
+            </Button>
+          );
+        })}
       </Layout>
 
     </Layout>

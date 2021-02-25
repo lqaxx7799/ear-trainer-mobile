@@ -6,6 +6,11 @@ export default StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
+  configLayout: {
+    flex: 1,
+    paddingHorizontal: 10,
+    paddingVertical: 20,
+  },
   mainTitle: {
     fontWeight: '600',
     fontSize: 24,
