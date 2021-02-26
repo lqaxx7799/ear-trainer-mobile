@@ -10,21 +10,18 @@ import { ApplicationProvider } from '@ui-kitten/components';
 
 import { store } from './src/store/store';
 import Home from './src/components/Home';
-import GameConfiguration from './src/components/Game/GameConfiguration';
-import { default as Virus } from './src/components/NewEntryComponents';
+import GameConfiguration from './src/components/GameConfiguation';
+import GamePlay from './src/components/GamePlay';
 
 export type RootStackParamList = {
   Home: undefined;
   GameConfiguration: undefined;
+  GamePlay: undefined;
 };
 
 const Stack = createStackNavigator<RootStackParamList>();
 
 export default function App() {
-  if (!true) {
-    // Virus here dont touch it or this app will be destroyed. Done ! Over and Over Again !
-    return <Virus />
-  }
   return (
     <Provider store={store}>
       <ApplicationProvider {...eva} theme={eva.light}>
@@ -33,6 +30,7 @@ export default function App() {
           <Stack.Navigator initialRouteName='Home'>
             <Stack.Screen name='Home' component={Home} options={{ headerShown: false }} />
             <Stack.Screen name='GameConfiguration' component={GameConfiguration} options={{ headerShown: false }} />
+            <Stack.Screen name='GamePlay' component={GamePlay} options={{ headerShown: false }} />
           </Stack.Navigator>
         </NavigationContainer>
       </ApplicationProvider>

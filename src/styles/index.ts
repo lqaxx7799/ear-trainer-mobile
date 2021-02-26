@@ -19,4 +19,12 @@ export default StyleSheet.create({
     fontWeight: '600',
     fontSize: 18,
   },
+  buttonBlock: {
+    flex: 1,
+  },
+  inlineButtonGroup: {
+    flexDirection:'row',
+    flexWrap:'wrap',
+    justifyContent: 'center',
+  },
 });

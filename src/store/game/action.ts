@@ -4,6 +4,7 @@ import { GameType } from '../../helpers/type';
 import { GameActionTypes } from './type';
 import { GAME_CONFIGURATIONS } from '../../helpers/constants';
 import { RootState } from '../../store';
+import gameHelpers from './helper';
 
 function setGameType(type: GameType) {
   return (dispatch: Dispatch) => {
@@ -14,7 +15,7 @@ function setGameType(type: GameType) {
         case 'comboBox':
           return [];
         case 'number':
-          return 0;
+          return '0';
       }
     });
 
@@ -43,7 +44,27 @@ function editGameConfig(configKey: string, newValues: any) {
   }
 }
 
+function startGame() {
+  return (dispatch: Dispatch, getState: () => RootState) => {
+    const state = getState();
+    const { config, type } = state.gameReducer;
+    const question = gameHelpers.generateQuestion(type, config);
+    const answeringOptions = gameHelpers.getAnsweringOptions(type, config);
+
+    dispatch<GameActionTypes> ({
+      type: 'GAME_STARTED',
+      payload: {
+        progress: {
+          records: [question],
+          streak: 0,
+        },
+      },
+    });
+  }
+}
+
 export default {
   setGameType,
   editGameConfig,
+  startGame,
 };

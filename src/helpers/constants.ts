@@ -120,6 +120,7 @@ const GAME_CONFIGURATIONS: GameConfigurationsType = {
     questionCount: {
       title: 'Questions',
       formType: 'number',
+      placeholder: 'Select question number (Write 0 for endless)',
     },
     intervalTypes: {
       title: 'Interval Type',

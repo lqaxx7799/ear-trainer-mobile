@@ -18,6 +18,7 @@ export interface GameConfigurationType {
   title: string;
   data?: any[];
   formType: 'select' | 'number' | 'comboBox';
+  placeholder?: string;
 };
 
 export type GameConfigurationsType = {

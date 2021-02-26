@@ -3,6 +3,7 @@ import { GameState, GameActionTypes } from './type';
 const defaultState: GameState = {
   type: null,
   config: {},
+  progress: {},
 };
 
 const gameReducer = (state = defaultState, action: GameActionTypes) => {
@@ -17,6 +18,11 @@ const gameReducer = (state = defaultState, action: GameActionTypes) => {
       return {
         ...state,
         config: action.payload,
+      };
+    case 'GAME_STARTED':
+      return {
+        ...state,
+        progress: action.payload.progress,
       };
     default:
       return state;

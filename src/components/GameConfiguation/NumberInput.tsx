@@ -5,10 +5,11 @@ import { Layout, Input } from '@ui-kitten/components';
 
 type Props = {
   value: string,
+  placeholder?: string,
   onChange: (newValue: string) => void,
 }
 
-export default function NumberInput({ value, onChange }: Props) {
+export default function NumberInput({ value, placeholder, onChange }: Props) {
   const updateValue = (value: string) => {
     onChange(value);
   }
@@ -16,7 +17,7 @@ export default function NumberInput({ value, onChange }: Props) {
   return (
     <Layout>
       <Input
-        placeholder='Place your Text'
+        placeholder={placeholder || 'Place your Text'}
         keyboardType={Platform.OS === 'android' ? 'numeric' : 'number-pad'}
         value={value}
         onChangeText={nextValue => updateValue(nextValue)}

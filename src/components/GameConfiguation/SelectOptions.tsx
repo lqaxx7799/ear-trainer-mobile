@@ -8,22 +8,25 @@ type Props = {
   onChange: (newValue: string) => void,
 }
 
-export default function Combobox({ options, value, onChange }: Props) {
+export default function SelectOptions({ options, value, onChange }: Props) {
   if (!options) {
     return null;
   }
 
   const updateValue = (index: IndexPath | IndexPath[]) => {
     if (index instanceof IndexPath) {
-      onChange(options[index.row].title);
+      onChange(options[index.row].value);
     }
   }
-console.log(1111, options);
+
+  const selectedIndex = _.findIndex(options, option => option.value === value);
+
   return (
     <Layout>
       <Select
-        // selectedIndex={new IndexPath(_.findIndex(options, option => option.value === value))}
-        // onSelect={index => updateValue(index)}
+        selectedIndex={selectedIndex !== -1 ? new IndexPath(selectedIndex) : undefined}
+        onSelect={index => updateValue(index)}
+        value={selectedIndex !== -1 ? options[selectedIndex].title : undefined}
       >
         {options.map((option: any) => (
           <SelectItem title={option.title} key={option.value} />

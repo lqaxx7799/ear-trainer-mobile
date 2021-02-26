@@ -2,8 +2,7 @@ import React from 'react';
 import _ from 'lodash';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
-import { Dimensions, Keyboard } from 'react-native';
+import { ScrollView } from 'react-native-gesture-handler';
 import { RouteProp } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { Button, Layout, Text } from '@ui-kitten/components';
@@ -15,9 +14,9 @@ import { INTERVAL_TYPES, INTERVAL_GROUPS, GAME_CONFIGURATIONS, GAME_TYPES } from
 import { GameConfigurationType } from '../../helpers/type';
 import gameActions from '../../store/game/action';
 
-import Combobox from './Configurations/Combobox';
-import Select from './Configurations/Select';
-import NumberInput from './Configurations/NumberInput';
+import Combobox from './Combobox';
+import SelectOptions from './SelectOptions';
+import NumberInput from './NumberInput';
 import styles from '../../styles';
 
 type GameScreenNavigationProp = StackNavigationProp<RootStackParamList, 'GameConfiguration'>;
@@ -40,32 +39,38 @@ export default function GameConfiguration({ navigation }: Props) {
     dispatch(gameActions.editGameConfig(configKey, newValues));
   }
 
+  const startGame = () => {
+    dispatch(gameActions.startGame());
+    navigation.navigate('GamePlay');
+  }
+
   const renderConfig = (configKey: string, config: GameConfigurationType) => {
     switch (config.formType) {
       case 'comboBox':
         return (
           <Combobox
-            onChange={(newValues) => editGameConfig(configKey, newValues)}
-            options={config.data}
             key={configKey}
             values={gameConfiguration[configKey]}
+            options={config.data}
+            onChange={(newValues) => editGameConfig(configKey, newValues)}
           />
         );
       case 'number':
         return (
           <NumberInput
-            onChange={(newValue) => editGameConfig(configKey, newValue)}
             key={configKey}
             value={gameConfiguration[configKey]}
+            placeholder={config.placeholder}
+            onChange={(newValue) => editGameConfig(configKey, newValue)}
           />
         );
       case 'select':
         return (
-          <Select
-            onChange={(newValue) => editGameConfig(configKey, newValue)}
-            options={config.data}
+          <SelectOptions
             key={configKey}
+            options={config.data}
             value={gameConfiguration[configKey]}
+            onChange={(newValue) => editGameConfig(configKey, newValue)}
           />
         );
       default:
@@ -74,8 +79,10 @@ export default function GameConfiguration({ navigation }: Props) {
   }
 
   return (
-    <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false} style={{ height: Dimensions.get('screen').height }}>
-      <Layout style={styles.configLayout}>
+    <Layout style={styles.configLayout}>
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+      >
         <Text
           style={{
             ...styles.mainTitle,
@@ -103,13 +110,31 @@ export default function GameConfiguration({ navigation }: Props) {
           })}
         </Layout>
 
-        <Button
-          style={{ marginTop: 12 }}
-          onPress={() => navigation.navigate('Home')}
+        <Layout
+          style={{
+            ...styles.layout,
+            flexDirection: 'row',
+            marginTop: 12,
+          }}
         >
-          Back to Home
-        </Button>
-      </Layout>
-    </TouchableWithoutFeedback>
+          <Button
+            style={styles.buttonBlock}
+            status='danger'
+            onPress={() => navigation.navigate('Home')}
+          >
+            Back to Home
+          </Button>
+          <Layout style={{ width: 10 }}></Layout>
+          <Button
+            style={styles.buttonBlock}
+            status='primary'
+            onPress={startGame}
+          >
+            Start Game
+          </Button>
+        </Layout>
+        
+      </ScrollView>
+    </Layout>
   );
 }
