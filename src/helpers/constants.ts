@@ -1,4 +1,4 @@
-import { GameTypes, IntervalType, GameConfigurationsType } from "./type";
+import { GameTypes, IntervalType, GameConfigurationsType, GameOption } from "./type";
 
 const GAME_TYPES: GameTypes = {
   intervals: {
@@ -27,66 +27,90 @@ const INTERVAL_TYPES: IntervalType[] = [
   },
 ];
 
-const INTERVALS = [
+const INTERVALS: GameOption[] = [
   {
     title: 'Minor Second',
-    key: 'm2',
-    difference: 1,
+    value: 'm2',
+    meta: {
+      difference: 1,
+    },
   },
   {
     title: 'Major Second',
-    key: 'M2',
-    difference: 2,
+    value: 'M2',
+    meta: {
+      difference: 2,
+    },
   },
   {
     title: 'Minor Third',
-    key: 'm3',
-    difference: 3,
+    value: 'm3',
+    meta: {
+      difference: 3,
+    },
   },
   {
     title: 'Major Third',
-    key: 'M3',
-    difference: 4,
+    value: 'M3',
+    meta: {
+      difference: 4,
+    },
   },
   {
     title: 'Perfect Fourth',
-    key: 'P4',
-    difference: 5,
+    value: 'P4',
+    meta: {
+      difference: 5,
+    },
   },
   {
     title: 'Tritone',
-    key: 'TT',
-    difference: 6,
+    value: 'TT',
+    meta: {
+      difference: 6,
+    },
   },
   {
     title: 'Perfect Fifth',
-    key: 'P5',
-    difference: 7,
+    value: 'P5',
+    meta: {
+      difference: 7,
+    },
   },
   {
     title: 'Minor Sixth',
-    key: 'm6',
-    difference: 8,
+    value: 'm6',
+    meta: {
+      difference: 8,
+    },
   },
   {
     title: 'Major Sixth',
-    key: 'M6',
-    difference: 9,
+    value: 'M6',
+    meta: {
+      difference: 9,
+    },
   },
   {
     title: 'Minor Seventh',
-    key: 'm7',
-    difference: 10,
+    value: 'm7',
+    meta: {
+      difference: 10,
+    },
   },
   {
     title: 'Major Seventh',
-    key: 'M7',
-    difference: 11,
+    value: 'M7',
+    meta: {
+      difference: 11,
+    },
   },
   {
     title: 'Octave',
-    key: 'P8',
-    difference: 12,
+    value: 'P8',
+    meta: {
+      difference: 12,
+    },
   },
 ];
 

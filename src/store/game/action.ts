@@ -1,6 +1,6 @@
 import { Dispatch } from 'redux';
 import _ from 'lodash';
-import { GameType } from '../../helpers/type';
+import { GameOption, GameType } from '../../helpers/type';
 import { GameActionTypes } from './type';
 import { GAME_CONFIGURATIONS } from '../../helpers/constants';
 import { RootState } from '../../store';
@@ -49,22 +49,86 @@ function startGame() {
     const state = getState();
     const { config, type } = state.gameReducer;
     const question = gameHelpers.generateQuestion(type, config);
-    const answeringOptions = gameHelpers.getAnsweringOptions(type, config);
+    const answerOptions = gameHelpers.getDefaultAnsweringOptions(type, config);
+
+    if (question) {
+      dispatch<GameActionTypes> ({
+        type: 'GAME_STARTED',
+        payload: {
+          progress: {
+            records: [question],
+            streak: 0,
+            answerOptions,
+          },
+        },
+      });
+    }
+
+  }
+}
+
+function answerQuestion(option: GameOption) {
+  return (dispatch: Dispatch, getState: () => RootState) => {
+    const state = getState();
+    let { progress: { records, streak } } = state.gameReducer;
+
+    const currentQuestion = _.last(records);
+    if (!currentQuestion) {
+      return;
+    }
+
+    const isCorrect = option.value === currentQuestion.answer;
+    if (currentQuestion.isCorrect === undefined) {
+      currentQuestion.isCorrect = isCorrect;
+
+      if (isCorrect) {
+        streak = streak ? streak + 1 : 1;
+      } else {
+        streak = 0;
+      }
+    }
+
+    records = _.map(records, (record, index) => {
+      if (index !== _.size(records) - 1) {
+        return record;
+      }
+      return currentQuestion;
+    });
 
     dispatch<GameActionTypes> ({
-      type: 'GAME_STARTED',
+      type: 'GAME_QUESTION_ANSWERED',
       payload: {
-        progress: {
-          records: [question],
-          streak: 0,
-        },
+        records,
+        streak: streak || 0,
       },
     });
+
+    return isCorrect;
   }
+}
+
+function goToNewQuestion() {
+  return (dispatch: Dispatch, getState: () => RootState) => {
+    const state = getState();
+    const { config, type } = state.gameReducer;
+    const question = gameHelpers.generateQuestion(type, config);
+
+    if (question) {
+      dispatch<GameActionTypes> ({
+        type: 'GAME_NEXT_QUESTION',
+        payload: {
+          question,
+        },
+      });
+    }
+    
+  } 
 }
 
 export default {
   setGameType,
   editGameConfig,
   startGame,
+  answerQuestion,
+  goToNewQuestion,
 };

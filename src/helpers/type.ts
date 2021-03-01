@@ -3,6 +3,14 @@ export interface IntervalType {
   value: string;
 };
 
+export interface GameOption {
+  title: string;
+  value: string;
+  meta: {
+    [key: string]: any;
+  };
+};
+
 // const gameType = ['intervals', 'chords', 'perfectPitch'] as const;
 // export type GameType = typeof gameType[number];
 

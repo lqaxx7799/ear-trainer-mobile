@@ -1,8 +1,10 @@
-import { GameType } from "../../helpers/type";
+import { GameOption, GameType } from "../../helpers/type";
 
 export const GAME_TYPE_UPDATED = 'GAME_TYPE_UPDATED';
 export const GAME_CONFIGURATION_UPDATED = 'GAME_CONFIGURATION_UPDATED';
 export const GAME_STARTED = 'GAME_STARTED';
+export const GAME_QUESTION_ANSWERED = 'GAME_QUESTION_ANSWERED';
+export const GAME_NEXT_QUESTION = 'GAME_NEXT_QUESTION';
 
 interface GameStarted {
   type: typeof GAME_STARTED,
@@ -26,15 +28,37 @@ interface GameConfigurationUpdated {
   };
 };
 
-export type GameActionTypes = GameTypeUpdated | GameConfigurationUpdated | GameStarted;
+interface GameQuestionAnswered {
+  type: typeof GAME_QUESTION_ANSWERED;
+  payload: {
+    streak: number;
+    records: ({
+      [key: string]: any;
+    })[];
+  };
+};
+
+interface GameNextQuestion {
+  type: typeof GAME_NEXT_QUESTION;
+  payload: {
+    question: {
+      [key: string]: any;
+    };
+  };
+};
+
+export type GameActionTypes =
+  | GameTypeUpdated
+  | GameConfigurationUpdated
+  | GameStarted
+  | GameQuestionAnswered
+  | GameNextQuestion;
 
 interface GameStateProgress {
   records?: ({
     [key: string]: any;
-  } | null)[];
-  answerOptions?: ({
-    [key: string]: any;
-  } | null)[];
+  })[];
+  answerOptions?: (GameOption | null)[] | null;
   streak?: number,
 };
 
