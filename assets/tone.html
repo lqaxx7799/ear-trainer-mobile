@@ -9,10 +9,12 @@
 <body>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.8.12/Tone.js"></script>
   <script>
-    // var synth = new Tone.PolySynth(6, Tone.Synth).toMaster();
     const synth = new Tone.Synth();
     synth.oscillator.type = 'sine';
+    synth.volume.value = 12;
     synth.toDestination();
+
+    let now;
 
   </script>
 </body>

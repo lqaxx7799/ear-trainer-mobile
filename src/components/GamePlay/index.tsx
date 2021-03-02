@@ -1,10 +1,9 @@
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import _ from 'lodash';
 import { useDispatch, useSelector } from 'react-redux';
-import { RouteProp } from '@react-navigation/native';
+import { RouteProp, useIsFocused } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { Layout, Text, Button } from '@ui-kitten/components';
-import WebView from 'react-native-webview';
 
 import { RootStackParamList } from '../../../App';
 import styles from '../../styles';
@@ -13,6 +12,7 @@ import gameHelpers from '../../store/game/helper';
 import gameActions from '../../store/game/action';
 import { GAME_TYPES } from '../../helpers/constants';
 import { GameOption } from '../../helpers/type';
+import utilHelpers from '../../helpers/utils';
 import ToneWebView from './ToneWebView';
 
 
@@ -27,25 +27,22 @@ type Props = {
   route: GameScreenRouteProp;
 };
 
-export default function GamePlay({}: Props) {
+export default function GamePlay({ navigation }: Props) {
   const dispatch = useDispatch();
+  const isFocused = useIsFocused();
   const toneRef = useRef<any>(null);
 
   const [chosenOptions, setChosenOptions] = useState<GameOption[]>([]);
   const [nextQuestion, setNextQuestion] = useState<boolean>(false);
 
   const type = useSelector((state: RootState) => state.gameReducer.type);
+
   const gameConfiguration = useSelector(
     (state: RootState) => state.gameReducer.config
   );
-  const records = useSelector(
-    (state: RootState) => state.gameReducer.progress.records
-  );
-  const streak = useSelector(
-    (state: RootState) => state.gameReducer.progress.streak
-  );
-  const answerOptions = useSelector(
-    (state: RootState) => state.gameReducer.progress.answerOptions
+
+  const { records, streak, answerOptions } = useSelector(
+    (state: RootState) => state.gameReducer.progress
   );
 
   const correctCount = _.filter(records, (record) => record.isCorrect).length;
@@ -60,11 +57,12 @@ export default function GamePlay({}: Props) {
     (option) => currentQuestion.answer === option?.value
   );
 
-  const hearAgain = () => {
-    toneRef.current.injectJavaScript(`
-      synth.triggerAttack("C4");
-      setTimeout(() => synth.triggerRelease(), 500);
-    `);
+  const hearAudio = () => {
+    const script = utilHelpers.generateToneScript(
+      currentQuestion.question.notes,
+      currentQuestion.question.type,
+    );
+    toneRef.current.injectJavaScript(script);
   }
 
   const answer = (option: GameOption) => {
@@ -90,6 +88,10 @@ export default function GamePlay({}: Props) {
     setNextQuestion(false);
     dispatch(gameActions.goToNewQuestion());
   };
+
+  useEffect(() => {
+    setTimeout(() => hearAudio());
+  }, [currentQuestion]);
 
   return (
     <Layout style={styles.configLayout}>
@@ -123,7 +125,7 @@ export default function GamePlay({}: Props) {
             marginVertical: 20,
           }}
         >
-          <Button style={{ margin: 4 }} status="info" onPress={hearAgain}>
+          <Button style={{ margin: 4 }} status="info" onPress={hearAudio}>
             Hear Again
           </Button>
           {nextQuestion && (
