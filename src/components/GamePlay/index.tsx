@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import _ from 'lodash';
 import { useDispatch, useSelector } from 'react-redux';
-import { RouteProp, useIsFocused } from '@react-navigation/native';
+import { RouteProp } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { Layout, Text, Button } from '@ui-kitten/components';
 
@@ -14,7 +14,6 @@ import { GAME_TYPES } from '../../helpers/constants';
 import { GameOption } from '../../helpers/type';
 import utilHelpers from '../../helpers/utils';
 import ToneWebView from './ToneWebView';
-
 
 type GameScreenNavigationProp = StackNavigationProp<
   RootStackParamList,
@@ -29,7 +28,6 @@ type Props = {
 
 export default function GamePlay({ navigation }: Props) {
   const dispatch = useDispatch();
-  const isFocused = useIsFocused();
   const toneRef = useRef<any>(null);
 
   const [chosenOptions, setChosenOptions] = useState<GameOption[]>([]);
@@ -60,7 +58,6 @@ export default function GamePlay({ navigation }: Props) {
   const hearAudio = () => {
     const script = utilHelpers.generateToneScript(
       currentQuestion.question.notes,
-      currentQuestion.question.type,
     );
     toneRef.current.injectJavaScript(script);
   }
@@ -88,6 +85,10 @@ export default function GamePlay({ navigation }: Props) {
     setNextQuestion(false);
     dispatch(gameActions.goToNewQuestion());
   };
+
+  const endGame = () => {
+    navigation.navigate('GameCompleted');
+  }
 
   useEffect(() => {
     setTimeout(() => hearAudio());
@@ -181,7 +182,7 @@ export default function GamePlay({ navigation }: Props) {
       </Layout>
 
       <Layout style={{ flexGrow: 1 }}></Layout>
-      <Button status="success">End Game</Button>
+      <Button status="success" onPress={endGame}>End Game</Button>
 
       <ToneWebView
         ref={toneRef}

@@ -12,11 +12,13 @@ import { store } from './src/store/store';
 import Home from './src/components/Home';
 import GameConfiguration from './src/components/GameConfiguation';
 import GamePlay from './src/components/GamePlay';
+import GameCompleted from './src/components/GamePlay/GameCompleted';
 
 export type RootStackParamList = {
   Home: undefined;
   GameConfiguration: undefined;
   GamePlay: undefined;
+  GameCompleted: undefined;
 };
 
 const Stack = createStackNavigator<RootStackParamList>();
@@ -27,10 +29,14 @@ export default function App() {
       <ApplicationProvider {...eva} theme={eva.light}>
         <StatusBar hidden />
         <NavigationContainer>
-          <Stack.Navigator initialRouteName='Home'>
+          <Stack.Navigator
+            initialRouteName='Home'
+            screenOptions={{ gestureEnabled: false }}
+          >
             <Stack.Screen name='Home' component={Home} options={{ headerShown: false }} />
             <Stack.Screen name='GameConfiguration' component={GameConfiguration} options={{ headerShown: false }} />
             <Stack.Screen name='GamePlay' component={GamePlay} options={{ headerShown: false }} />
+            <Stack.Screen name='GameCompleted' component={GameCompleted} options={{ headerShown: false }} />
           </Stack.Navigator>
         </NavigationContainer>
       </ApplicationProvider>

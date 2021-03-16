@@ -6,7 +6,7 @@ function getRandomInRange(min: number, max: number) {
   return Math.floor(Math.random() * (max - min + 1) + min);
 }
 
-function generateToneScript(noteArray: string[], type: string) {
+function generateToneScript(noteArray: string[]) {
   const script = _.reduce(noteArray, (result, value, index) => {
     return result + `synth.triggerAttackRelease("${value}", "4n", now + ${index});`
   }, '');
